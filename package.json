@@ -1,0 +1,19 @@
+{
+  "name": "WN2Liv",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "3.4.0",
+    "jade": "*",
+    "mongodb": "*",
+    "async": "0.2.9",
+    "dateformat": "*",
+    "redis": "0.8.6",
+    "connect-redis": "1.4.5",
+    "request": "2.27.0",
+    "socket.io": "0.9.16"
+  }
+}

@@ -1,0 +1,83 @@
+doctype 5
+html(lang="en", ng-app="travel")
+	head
+		block head
+			meta(charset='utf-8')
+			title= title
+			
+			link(rel='stylesheet', href='/vendor/bootstrap/css/cerulean.min.css')
+			link(rel='stylesheet', href='/stylesheets/style.css')
+			link(rel='stylesheet', href='/vendor/datepicker/css/datepicker.css')
+			script(src='http://cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js')
+			script(src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
+			script.
+				$(function(){
+					// disabling dates
+					var nowTemp = new Date();
+					$.fn.datepicker.defaults.format = "yyyy/mm/dd";
+					var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+
+							var checkin = $('#dpd1').datepicker({
+								onRender: function(date) {
+									return date.valueOf() < now.valueOf() ? 'disabled' : '';
+								}
+							}).on('changeDate', function(ev) {
+								if (ev.date.valueOf() > checkout.date.valueOf()) {
+									var newDate = new Date(ev.date)
+									newDate.setDate(newDate.getDate() + 1);
+									checkout.setValue(newDate);
+								}
+								checkin.hide();
+								$('#dpd2')[0].focus();
+							}).data('datepicker');
+							var checkout = $('#dpd2').datepicker({
+								onRender: function(date) {
+									return date.valueOf() <= checkin.date.valueOf() ? 'disabled' : '';
+								}
+					}).on('changeDate', function(ev) {
+						checkout.hide();
+					}).data('datepicker');
+				});	
+	body
+		.container
+			.navbar.navbar-inverse
+				.container
+					.navbar-header
+						button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+							span.icon-bar
+							span.icon-bar
+							span.icon-bar
+						a.navbar-brand(href='/') 
+							b When2Liv
+
+		.container
+			.well
+				form.form-inline(role='form', method='post', action='/', ng-controller='form', ng-init= 'init(#{JSON.stringify(formparam)})')
+					.row
+						.col-md-3
+							.input-group
+								span.input-group-addon
+									span.glyphicon.glyphicon-map-marker
+								input#origin.form-control(type='text', placeholder='Your location', name='origin', ng-model= 'search.origin')
+						.col-md-3
+							.input-group
+								span.input-group-addon
+									span.glyphicon.glyphicon-globe
+								input#destination.form-control(type='text', placeholder='Airport', name='pickuplocation',ng-model= 'search.pickuplocation')
+						.col-md-2
+							.input-group
+								span.input-group-addon
+									span.glyphicon.glyphicon-calendar
+								input.datepicker#dpd1.form-control(type='text', placeholder='Arrival Date' , name='arrivaldate',ng-model= 'search.arrivaldate')
+						.col-md-2
+							.input-group
+								span.input-group-addon
+									span.glyphicon.glyphicon-plane
+								input#flightnumber.form-control(type='text', placeholder='Flight Nb', name='flightnumber',ng-model= 'search.flightnumber')
+						.col-md-2
+							button.btn.btn-primary(type='submit') Search	
+			block content
+
+		block scripts
+			script(src='/vendor/bootstrap/js/bootstrap.min.js')
+			script(src='/vendor/datepicker/js/bootstrap-datepicker.js')
